@@ -1,0 +1,7 @@
+IMPORTANT COMMANDS
+
+sudo service network-manager restart
+
+speedtest-cli
+
+g810-led -a ffffff
