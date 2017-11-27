@@ -6,4 +6,5 @@ Speed Test in Mbits
 speedtest-cli
 
 Color Setup for Keyboard
-g810-led -a ffffff
+g810-led -a 33965a
+
