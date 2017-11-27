@@ -1,7 +1,9 @@
 IMPORTANT COMMANDS
 
-sudo service network-manager restart
+Environment setup and consistency checks
 
+Speed Test in Mbits
 speedtest-cli
 
+Color Setup for Keyboard
 g810-led -a ffffff
