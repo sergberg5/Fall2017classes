@@ -1,3 +1,4 @@
+echo ""
 echo "     Please enter in your username with no trailing white spaces     "
 echo ""
 mkdir Users 2> /dev/null
@@ -19,9 +20,54 @@ search_user() {
 }
 
 player_hand(){
-	while
-	cardValue = shuf -i 1-13 -n 1
+		echo "" 
+		echo "Please input the amount you want to bet"
+		read bet
+		count=0
+		counter=1
+		cardValue=0
+	while true; do
+		tempValue=$(shuf -i 1-13 -n 1)
+		#echo $tempValue
+		cardValue=$(($cardValue + $tempValue))
+		echo ""
+		echo -n "Your current card value is " 
+		echo $cardValue;
+		count=$(($count + $counter))
+		echo ""
+		echo 'Do you want to hit or stay?'
+		echo "Enter h to hit and s to stay"
+		# echo $cardValue
+		# echo $count
+		if [ "$cardValue" -eq 21 ] && [ "$count" -eq 2 ]; then
+			echo "You got a Black Jack you Win!"
+			echo ""
+			echo -n "You currently have "
+			print_account_value $1
+			player_hand $1
+		elif [ "$cardValue" -gt 21 ]; then
+			echo "You Lost :("
 
+			accVal=print_account_value $1 2> /dev/null
+			accVal=$(($accVal - $bet))
+			echo $accVal > ./Users/$1.txt
+			echo ""
+			echo -n "You currently have "
+			print_account_value $1
+			player_hand $1
+		fi
+
+		read userInput
+		
+		case $userInput in
+
+		"h")   
+	       ;;
+        "s")
+	       break;;
+		esac
+	done
+	return $cardValue
 }
 
 card_value(){
@@ -58,8 +104,11 @@ print_contact() {
 print_account_value() {				#account value import
 	while read line; do    
     	echo -n $line 
-    	echo " dollars"    
+    	echo " dollars"
+    	accVal=$line  
 	done < ./Users/$1.txt
+
+	return $accVal
 }
 
 delete_contact() {
@@ -78,6 +127,8 @@ delete_contact() {
 
 		search_user $username 
 		player_hand $username
+		computerHand = $(computer_hand)
+
 		# "1")   echo "//Please enter first name"
 	 #       read firstName
 	 #       echo "//Please enter in Last Name"
