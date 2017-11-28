@@ -120,37 +120,6 @@ play_again(){
 	esac
 }
 
-# card_value(){
-# 	case $1 in
-
-# 		"1")   echo "//Please enter first name"
-# 	       read firstName
-# 	       echo "//Please enter in Last Name"
-# 	       read lastName
-# 	       search_contact $lastName;;
-#         "2")
-# 	       echo "//Please enter in Last Name"
-# 	       read lastName
-# 	       print_contact $lastName;;
-#         "3")
-# 	       echo "//Please enter in Last Name"
-#                read lastName
-#                delete_contact $lastName;;
-# esac
-# }
-
-
-# print_contact() {
-#         if [ -e ./Contacts/$1.* ]
-#         then
-#                 cat ./Contacts/$1.DAT
-#                 exit
-#         else
-#                 echo "//Contact not Found"
-#                 exit
-#         fi
-# }
-
 print_account_value() {				#account value import
 	while read line; do    
     	echo -n $line 
@@ -160,20 +129,6 @@ print_account_value() {				#account value import
 
 	return $accVal
 }
-
-# delete_contact() {
-#         if [ -e ./Contacts/$1.* ]
-#         then
-#                 rm ./Contacts/$1.DAT
-# 		echo "//Contact Removed"
-#                 exit
-#         else
-#                 echo "//Contact not found"
-#                 exit
-#         fi
-# }
-
-# case $username in
 
 		search_user $username 
 		player_hand $username
@@ -191,18 +146,3 @@ print_account_value() {				#account value import
 	       			break;;
 			esac
 		fi
-
-		# "1")   echo "//Please enter first name"
-	 #       read firstName
-	 #       echo "//Please enter in Last Name"
-	 #       read lastName
-	 #       search_contact $lastName;;
-  #       "2")
-	 #       echo "//Please enter in Last Name"
-	 #       read lastName
-	 #       print_contact $lastName;;
-  #       "3")
-	 #       echo "//Please enter in Last Name"
-  #              read lastName
-  #              delete_contact $lastName;;
-# esac
