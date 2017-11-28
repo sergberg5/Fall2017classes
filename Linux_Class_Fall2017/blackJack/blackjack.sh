@@ -27,9 +27,9 @@ player_hand(){
 		counter=1
 		cardValue=0
 	while true; do
-		tempValue=$(shuf -i 1-13 -n 1)
+		tempPlayerValue=$(shuf -i 1-13 -n 1)
 		#echo $tempValue
-		cardValue=$(($cardValue + $tempValue))
+		cardValue=$(($cardValue + $tempPlayerValue))
 		echo ""
 		echo -n "Your current card value is " 
 		echo $cardValue;
@@ -44,7 +44,8 @@ player_hand(){
 			echo ""
 			echo -n "You currently have "
 			print_account_value $1
-			player_hand $1
+			blackJack=0
+			play_again
 		elif [ "$cardValue" -gt 21 ]; then
 			echo "You Lost :("
 
@@ -54,7 +55,8 @@ player_hand(){
 			echo ""
 			echo -n "You currently have "
 			print_account_value $1
-			player_hand $1
+			blackJack=0
+			play_again
 		fi
 
 		read userInput
@@ -70,36 +72,84 @@ player_hand(){
 	return $cardValue
 }
 
-card_value(){
-	case $1 in
+computer_hand(){
+	### BALLZY PLAY: Please input 15 18 or 20 into the variable $comp
+	comp=18
+	echo -n "Calculating computer hand"
+	echo -n " ."
+	while true; do
+		tempPlayerValue=$(shuf -i 1-13 -n 1)
+		echo -n " ."
+		#echo $tempValue
+		compCardValue=$(($compCardValue + $tempPlayerValue))
+		echo -n " ."
 
-		"1")   echo "//Please enter first name"
-	       read firstName
-	       echo "//Please enter in Last Name"
-	       read lastName
-	       search_contact $lastName;;
-        "2")
-	       echo "//Please enter in Last Name"
-	       read lastName
-	       print_contact $lastName;;
-        "3")
-	       echo "//Please enter in Last Name"
-               read lastName
-               delete_contact $lastName;;
-esac
+		if [ "$compCardValue" -eq 21 ] && [ "$count" -eq 2 ]; then
+			echo "You lost :( Dealer got BlackJack"
+			echo ""
+			echo -n "You currently have "
+			print_account_value $1
+			blackJack=0
+			play_again
+		elif [ "$compCardValue" -gt 21 ]; then
+			echo "Dealer Bust: You Win"
+
+			accVal=print_account_value $1 2> /dev/null
+			accVal=$(($accVal + $bet * 2))
+			echo $accVal > ./Users/$1.txt
+			echo ""
+			echo -n "You currently have "
+			print_account_value $1
+			blackJack=0
+			play_again
+		elif [ "$cardValue" -ge "$comp" ]; then
+			break
+		fi
+	done
+
 }
 
-
-print_contact() {
-        if [ -e ./Contacts/$1.* ]
-        then
-                cat ./Contacts/$1.DAT
-                exit
-        else
-                echo "//Contact not Found"
-                exit
-        fi
+play_again(){
+	echo "Thanks for playing did you want to play again? (y/n)"
+	read playAgain
+	case $playAgain in
+		"y")   
+	       	player_hand $username;;
+        "n")
+	       	break;;
+	esac
 }
+
+# card_value(){
+# 	case $1 in
+
+# 		"1")   echo "//Please enter first name"
+# 	       read firstName
+# 	       echo "//Please enter in Last Name"
+# 	       read lastName
+# 	       search_contact $lastName;;
+#         "2")
+# 	       echo "//Please enter in Last Name"
+# 	       read lastName
+# 	       print_contact $lastName;;
+#         "3")
+# 	       echo "//Please enter in Last Name"
+#                read lastName
+#                delete_contact $lastName;;
+# esac
+# }
+
+
+# print_contact() {
+#         if [ -e ./Contacts/$1.* ]
+#         then
+#                 cat ./Contacts/$1.DAT
+#                 exit
+#         else
+#                 echo "//Contact not Found"
+#                 exit
+#         fi
+# }
 
 print_account_value() {				#account value import
 	while read line; do    
@@ -111,23 +161,36 @@ print_account_value() {				#account value import
 	return $accVal
 }
 
-delete_contact() {
-        if [ -e ./Contacts/$1.* ]
-        then
-                rm ./Contacts/$1.DAT
-		echo "//Contact Removed"
-                exit
-        else
-                echo "//Contact not found"
-                exit
-        fi
-}
+# delete_contact() {
+#         if [ -e ./Contacts/$1.* ]
+#         then
+#                 rm ./Contacts/$1.DAT
+# 		echo "//Contact Removed"
+#                 exit
+#         else
+#                 echo "//Contact not found"
+#                 exit
+#         fi
+# }
 
 # case $username in
 
 		search_user $username 
 		player_hand $username
-		computerHand = $(computer_hand)
+		
+		if [ "$blackJack" -ne 0 ]; then
+			computer_hand
+			if [ "$cardValue" -gt "$compCardValue"]
+		else
+			echo "Thanks for playing did you want to play again? (y/n)"
+			read playAgain
+			case $playAgain in
+				"y")   
+	       			print_account_value $username;;
+        		"n")
+	       			break;;
+			esac
+		fi
 
 		# "1")   echo "//Please enter first name"
 	 #       read firstName
