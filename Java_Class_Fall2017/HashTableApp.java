@@ -50,12 +50,21 @@ class HashTable
 	// (assumes table not full)
 		{
 		int key = item.getKey();		//extract key
-		int hashVal = hashFunc(key);
+		int hashVal = hashFunc(key); 	
 
 		while(hashArray[hashVal] != null && hashArray[hashVal].getKey() != -1)
 		{
-		++hashVal;
-		hashVal %= arraySize;			//wraparound if necessary	
+			if(hashVal == 0){
+				hashVal = 1;
+			}
+			else{
+				hashVal = hashVal * hashVal;
+				System.out.println("HASH VALUE: " + hashVal);
+				int wrapAroundVal = 0;
+				wrapAroundVal = hashVal % arraySize;
+				hashVal = wrapAroundVal % 2;			//wraparound if necessary
+			}
+			
 		}
 		hashArray[hashVal] = item;
 		} //end insert
@@ -63,7 +72,6 @@ class HashTable
 	public DataItem delete(int key)
 		{
 		int hashVal = hashFunc(key);
-
 		while(hashArray[hashVal] != null)
 			{
 			if(hashArray[hashVal].getKey() == key)
