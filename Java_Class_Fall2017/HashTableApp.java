@@ -51,23 +51,14 @@ class HashTable
 		{
 		int key = item.getKey();		//extract key
 		int hashVal = hashFunc(key); 
-		System.out.println("HASH VALUE BEFORE WHILE LOOP "+ hashVal);	
-		int hashValSquared = 0;
-		int flip = 0;
 
 		while(hashArray[hashVal] != null && hashArray[hashVal].getKey() != -1)
 		{
 			++hashVal;
-			hashValSquared = hashVal*hashVal;
-			System.out.println("HASH VALUE SQUARED IN LOOP " + hashValSquared);
+			hashVal = hashVal*hashVal;
 			hashVal %= arraySize;			//wraparound if necessary	
-			flip = 1;
 		}
-		if(flip == 0){
-			hashValSquared = hashVal*hashVal;
-		}
-		System.out.println("HASH VALUE SQUARED " + hashValSquared);
-		hashArray[hashValSquared] = item;
+		hashArray[hashVal] = item;
 		} //end insert
 //-------------------------------------------
 	public DataItem delete(int key)
