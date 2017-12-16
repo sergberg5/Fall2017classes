@@ -1,3 +1,5 @@
+echo "//////PLEASE CREATE USERPROFILE FILE in current directory /////"
+echo "//////with the format firstName,lastName,PhoneNumber,email/////"
 echo "Reading userprofile ..."
 #!/bin/bash
 input="userprofile"
@@ -16,6 +18,19 @@ done < "$input"
 #Your script must generate a user name with the following format: FirstLetterOfFirstNameLastName
 #Example: for user Luis Barreto, the user name created must be lbarreto
 
+
+#random function for password and user add function 
+randpw(){ 
+	password=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-8})
+	echo $password
+}
+
+addinguser(){
+	encryptpwd=$(openssl passwd -crypt $password )
+	sudo useradd $1 -m -s /bin/bash -p $encryptpwd
+}
+
+
 firstLetter="$(echo $fname | head -c 1)"
 username=$firstLetter$lname
 
@@ -24,32 +39,23 @@ username=$firstLetter$lname
 #lbarreto
 #lbarreto1
 #lbarreto2
+original=$username
 inc=1
 	while true; do
 		if grep -q  $username /etc/passwd;
 		then
-	    	username=$username$inc
-	    	inc=$inc+1
-			#echo $username
+	    	username=$original$inc
+	    	inc=$((inc + 1))
 		else
-			#passwd=randpw()
-			passwd="Hello"
-			addauser $username
-			#echo $passwd
+			randpw
+			addinguser $username
+			mkdir /home/$username/public_html/
     	    break
     	fi
 	done
-
-randpw(){ 
-	pass=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-16})
-	return $pass
-}
-
-addauser(){
-	echo $1
-	sudo useradd $1 -m -s /bin/bash
-}
-#Your script must also create a random password for each user.
+echo $username > userCreation.log
+echo $password >> userCreation.log
+eval echo ~$username >> userCreation.log
 
 #Once you have those two components, your script must execute the useradd command. 
 
@@ -57,3 +63,4 @@ addauser(){
 
 #After the user account is created and its home directory is configured correctly, your script must output the username, password and home directory absolute path to a userCreation.log file.
 #You must submit your shell script by uploading it to iLearn.
+
